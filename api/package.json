@@ -1,0 +1,6 @@
+{
+  "name": "3games-proxy",
+  "version": "1.0.0",
+  "description": "API proxy for 3games",
+  "main": "api/proxy.js"
+}

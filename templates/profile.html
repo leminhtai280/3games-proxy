@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<h2>Hello, {{ user.username }}</h2>
+<p>Balance: ${{ user.profile.balance }}</p>
+<a href="{% url 'deposit' %}" class="btn btn-primary">Deposit</a>
+{% endblock %}

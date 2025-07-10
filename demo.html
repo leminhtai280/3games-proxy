@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo API - Hệ thống quản lý người dùng</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #1976d2;
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #1976d2;
+            padding-bottom: 10px;
+        }
+        .api-section {
+            margin-bottom: 30px;
+        }
+        .endpoint {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border-left: 4px solid #1976d2;
+        }
+        .method {
+            font-weight: bold;
+            color: #1976d2;
+        }
+        .url {
+            font-family: monospace;
+            background: #e9ecef;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        .description {
+            margin-top: 10px;
+            color: #666;
+        }
+        .test-form {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .test-form input, .test-form textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .test-form button {
+            background: #1976d2;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .test-form button:hover {
+            background: #1565c0;
+        }
+        .response {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success {
+            color: #4caf50;
+        }
+        .error {
+            color: #f44336;
+        }
+        .info {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4caf50;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Demo API - Hệ thống quản lý người dùng</h1>
+    
+    <div class="info">
+        <strong>📍 API Base URL:</strong> http://localhost:5000/api<br>
+        <strong>👤 Admin Account:</strong> admin / admin123<br>
+        <strong>🔗 Frontend:</strong> <a href="http://localhost:3000" target="_blank">http://localhost:3000</a>
+    </div>
+
+    <div class="container">
+        <h2>🔐 Authentication APIs</h2>
+        
+        <div class="api-section">
+            <div class="endpoint">
+                <div class="method">POST</div>
+                <div class="url">/api/auth/register</div>
+                <div class="description">Đăng ký tài khoản mới</div>
+                <div class="test-form">
+                    <input type="text" id="reg-username" placeholder="Username" value="demo_user">
+                    <input type="email" id="reg-email" placeholder="Email" value="demo@example.com">
+                    <input type="password" id="reg-password" placeholder="Password" value="123456">
+                    <input type="text" id="reg-fullname" placeholder="Full Name" value="Demo User">
+                    <input type="text" id="reg-phone" placeholder="Phone (optional)" value="0123456789">
+                    <button onclick="testRegister()">Test Register</button>
+                    <div id="reg-response" class="response"></div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="method">POST</div>
+                <div class="url">/api/auth/login</div>
+                <div class="description">Đăng nhập</div>
+                <div class="test-form">
+                    <input type="text" id="login-username" placeholder="Username/Email" value="admin">
+                    <input type="password" id="login-password" placeholder="Password" value="admin123">
+                    <button onclick="testLogin()">Test Login</button>
+                    <div id="login-response" class="response"></div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="method">GET</div>
+                <div class="url">/api/auth/me</div>
+                <div class="description">Lấy thông tin user hiện tại (cần token)</div>
+                <div class="test-form">
+                    <input type="text" id="me-token" placeholder="JWT Token">
+                    <button onclick="testGetMe()">Test Get Me</button>
+                    <div id="me-response" class="response"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>💰 Payment APIs</h2>
+        
+        <div class="api-section">
+            <div class="endpoint">
+                <div class="method">POST</div>
+                <div class="url">/api/payments/create</div>
+                <div class="description">Tạo yêu cầu nạp tiền (cần token)</div>
+                <div class="test-form">
+                    <input type="text" id="payment-token" placeholder="JWT Token">
+                    <input type="number" id="payment-amount" placeholder="Amount (VNĐ)" value="100000">
+                    <select id="payment-method">
+                        <option value="bank_transfer">Chuyển khoản ngân hàng</option>
+                        <option value="credit_card">Thẻ tín dụng</option>
+                        <option value="paypal">PayPal</option>
+                        <option value="momo">MoMo</option>
+                        <option value="zalopay">ZaloPay</option>
+                    </select>
+                    <textarea id="payment-description" placeholder="Description (optional)">Nạp tiền test</textarea>
+                    <button onclick="testCreatePayment()">Test Create Payment</button>
+                    <div id="payment-response" class="response"></div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="method">GET</div>
+                <div class="url">/api/payments/my-payments</div>
+                <div class="description">Lấy lịch sử giao dịch (cần token)</div>
+                <div class="test-form">
+                    <input type="text" id="payments-token" placeholder="JWT Token">
+                    <button onclick="testGetPayments()">Test Get Payments</button>
+                    <div id="payments-response" class="response"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>👥 Admin APIs</h2>
+        
+        <div class="api-section">
+            <div class="endpoint">
+                <div class="method">GET</div>
+                <div class="url">/api/admin/dashboard</div>
+                <div class="description">Dashboard thống kê (cần admin token)</div>
+                <div class="test-form">
+                    <input type="text" id="admin-token" placeholder="Admin JWT Token">
+                    <button onclick="testAdminDashboard()">Test Admin Dashboard</button>
+                    <div id="admin-response" class="response"></div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="method">GET</div>
+                <div class="url">/api/admin/users</div>
+                <div class="description">Danh sách người dùng (cần admin token)</div>
+                <div class="test-form">
+                    <input type="text" id="users-token" placeholder="Admin JWT Token">
+                    <button onclick="testGetUsers()">Test Get Users</button>
+                    <div id="users-response" class="response"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000/api';
+
+        async function makeRequest(url, options = {}) {
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    },
+                    ...options
+                });
+                
+                const data = await response.json();
+                return { success: response.ok, data, status: response.status };
+            } catch (error) {
+                return { success: false, data: { error: error.message }, status: 0 };
+            }
+        }
+
+        function showResponse(elementId, result) {
+            const element = document.getElementById(elementId);
+            element.textContent = JSON.stringify(result, null, 2);
+            element.className = `response ${result.success ? 'success' : 'error'}`;
+        }
+
+        async function testRegister() {
+            const data = {
+                username: document.getElementById('reg-username').value,
+                email: document.getElementById('reg-email').value,
+                password: document.getElementById('reg-password').value,
+                fullName: document.getElementById('reg-fullname').value,
+                phone: document.getElementById('reg-phone').value
+            };
+
+            const result = await makeRequest(`${API_BASE}/auth/register`, {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
+
+            showResponse('reg-response', result);
+        }
+
+        async function testLogin() {
+            const data = {
+                username: document.getElementById('login-username').value,
+                password: document.getElementById('login-password').value
+            };
+
+            const result = await makeRequest(`${API_BASE}/auth/login`, {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
+
+            showResponse('login-response', result);
+            
+            // Auto-fill token fields if login successful
+            if (result.success && result.data.token) {
+                document.getElementById('me-token').value = result.data.token;
+                document.getElementById('payment-token').value = result.data.token;
+                document.getElementById('payments-token').value = result.data.token;
+                if (result.data.user.role === 'admin') {
+                    document.getElementById('admin-token').value = result.data.token;
+                    document.getElementById('users-token').value = result.data.token;
+                }
+            }
+        }
+
+        async function testGetMe() {
+            const token = document.getElementById('me-token').value;
+            const result = await makeRequest(`${API_BASE}/auth/me`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            showResponse('me-response', result);
+        }
+
+        async function testCreatePayment() {
+            const token = document.getElementById('payment-token').value;
+            const data = {
+                amount: parseInt(document.getElementById('payment-amount').value),
+                method: document.getElementById('payment-method').value,
+                description: document.getElementById('payment-description').value
+            };
+
+            const result = await makeRequest(`${API_BASE}/payments/create`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify(data)
+            });
+
+            showResponse('payment-response', result);
+        }
+
+        async function testGetPayments() {
+            const token = document.getElementById('payments-token').value;
+            const result = await makeRequest(`${API_BASE}/payments/my-payments`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            showResponse('payments-response', result);
+        }
+
+        async function testAdminDashboard() {
+            const token = document.getElementById('admin-token').value;
+            const result = await makeRequest(`${API_BASE}/admin/dashboard`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            showResponse('admin-response', result);
+        }
+
+        async function testGetUsers() {
+            const token = document.getElementById('users-token').value;
+            const result = await makeRequest(`${API_BASE}/admin/users`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            showResponse('users-response', result);
+        }
+    </script>
+</body>
+</html>
